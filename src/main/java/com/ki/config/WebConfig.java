@@ -5,8 +5,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+
+import java.util.Locale;
 
 @Configuration
 @EnableWebMvc
@@ -44,8 +47,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     ResourceBundleMessageSource messageSource() {
         ResourceBundleMessageSource source = new ResourceBundleMessageSource();
-        source.setBasenames("/WEB-INF/i18n/application", "/WEB-INF/i18n/messages");
-//        source.setUseCodeAsDefaultMessage(true);
+//        source.setBasenames("WEB-INF/i18n/application", "WEB-INF/i18n/messages");  // NG
+        source.setBasenames("i18n/application", "i18n/messages");  // OK
+        source.setUseCodeAsDefaultMessage(true);
         source.setDefaultEncoding("UTF-8");
         source.setFallbackToSystemLocale(false);
         return source;
@@ -53,11 +57,22 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Bean
     LocaleChangeInterceptor localeChangeInterceptor() {
-        return new LocaleChangeInterceptor();
+        LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
+        interceptor.setParamName("lang");
+        return interceptor;
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeChangeInterceptor());
+    }
+
+    @Bean
+    CookieLocaleResolver localeResolver() {
+        CookieLocaleResolver resolver = new CookieLocaleResolver();
+        resolver.setDefaultLocale(Locale.ENGLISH);
+        resolver.setCookieName("locale");
+        resolver.setCookieMaxAge(3600);
+        return resolver;
     }
 }

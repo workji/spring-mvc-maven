@@ -9,6 +9,7 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <html>
 <head>
+    <meta charset="utf-8">
     <title><spring:message code="test.title"/></title>
 </head>
 <body>
