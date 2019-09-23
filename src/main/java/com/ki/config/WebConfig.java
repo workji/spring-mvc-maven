@@ -21,7 +21,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**")
                 .addResourceLocations("/")
-                .setCachePeriod(31556926);
+                .setCachePeriod(10);
     }
 
     @Bean
@@ -47,7 +47,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     ResourceBundleMessageSource messageSource() {
         ResourceBundleMessageSource source = new ResourceBundleMessageSource();
-//        source.setBasenames("WEB-INF/i18n/application", "WEB-INF/i18n/messages");  // NG
+//        source.setBasenames("/WEB-INF/i18n/application", "WEB-INF/i18n/messages");  // NG
         source.setBasenames("i18n/application", "i18n/messages");  // OK
         source.setUseCodeAsDefaultMessage(true);
         source.setDefaultEncoding("UTF-8");

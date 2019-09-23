@@ -20,6 +20,7 @@ public class HelloController {
     @RequestMapping("/hello")
     public String test1(Model model, @Value("${test.item1.text}") String text, Locale locale) {
         String i18nString = messageSource.getMessage("msg.test.item1", null, locale);
+        System.out.println(i18nString);
         model.addAttribute("receiveMsg", text + i18nString);
         model.addAttribute("locale", locale.toString());
         return "sample";
