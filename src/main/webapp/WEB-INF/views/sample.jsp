@@ -15,5 +15,6 @@
 <body>
 <p>${receiveMsg}</p>
 <p>Locale : ${locale}</p>
+<p>Now Count: ${count_msg}</p>
 </body>
 </html>
