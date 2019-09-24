@@ -1,16 +1,23 @@
 package com.ki.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.web.servlet.config.annotation.*;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
+import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = "com.ki")
 public class WebConfig implements WebMvcConfigurer {
+
+    @Autowired
+    private ApplicationContext applicationContext;
 
     // Declare the static resources
     @Override
@@ -21,12 +28,24 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    InternalResourceViewResolver viewResolver() {
-        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-        resolver.setPrefix("/WEB-INF/views/");
-        resolver.setSuffix(".jsp");
-        resolver.setRequestContextAttribute("requestContext");
-        return resolver;
+    ThymeleafViewResolver viewResolver() {
+        ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
+
+        SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
+        templateResolver.setApplicationContext(applicationContext);
+        templateResolver.setPrefix("/WEB-INF/templates/");
+        templateResolver.setSuffix(".html");
+        templateResolver.setCharacterEncoding("UTF-8"); // for static html
+
+        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+        templateEngine.setTemplateResolver(templateResolver);
+        templateEngine.setTemplateEngineMessageSource(messageSource());
+
+        viewResolver.setTemplateEngine(templateEngine);
+        viewResolver.setCharacterEncoding("UTF-8"); // for model data show
+        viewResolver.setOrder(1);
+
+        return viewResolver;
     }
 
     // Declare Controllers
@@ -50,8 +69,6 @@ public class WebConfig implements WebMvcConfigurer {
         return source;
     }
 
-
-
     @Bean
     MyInterceptor myInterceptor() {
         return new MyInterceptor();
@@ -59,22 +76,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(localeChangeInterceptor());  // disable this to automatic read accept-language for i81n
         registry.addInterceptor(myInterceptor());
     }
-
-//    @Bean
-//    LocaleChangeInterceptor localeChangeInterceptor() {
-//        LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
-//        interceptor.setParamName("lang");
-//        return interceptor;
-//    }
-//    @Bean
-//    CookieLocaleResolver localeResolver() {
-//        CookieLocaleResolver resolver = new CookieLocaleResolver();
-//        resolver.setDefaultLocale(Locale.ENGLISH);
-//        resolver.setCookieName("locale");
-//        resolver.setCookieMaxAge(3600);
-//        return resolver;
-//    }
 }

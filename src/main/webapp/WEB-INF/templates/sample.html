@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title th:text="#{test.title}"></title>
+</head>
+<body>
+<p th:text="${receiveMsg}"></p>
+<p th:text="'Locale : ' + ${locale}"></p>
+<p th:text="|Elapsed Time: ${elapsed_time} ms|"></p>
+<p th:text="'Now Count: ' + ${count_msg}"></p>
+</body>
+</html>

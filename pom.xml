@@ -13,6 +13,7 @@
 
     <properties>
         <springframework.version>5.1.8.RELEASE</springframework.version>
+        <thymeleaf.version>3.0.11.RELEASE</thymeleaf.version>
     </properties>
 
     <dependencies>
@@ -42,8 +43,13 @@
         </dependency>
         <dependency>
             <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf</artifactId>
+            <version>${thymeleaf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.thymeleaf</groupId>
             <artifactId>thymeleaf-spring5</artifactId>
-            <version>3.0.11.RELEASE</version>
+            <version>${thymeleaf.version}</version>
         </dependency>
         <!-- servlet end -->
     </dependencies>
